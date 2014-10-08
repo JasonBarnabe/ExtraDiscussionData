@@ -7,7 +7,8 @@ $PluginInfo['ExtraDiscussionData'] = array(
    'Version' => '1.0',
    'RequiredApplications' => array('Vanilla' => '2.1'),
    'Author' => "Jason Barnabe",
-   'AuthorEmail' => 'jason.barnabe@gmail.com'
+   'AuthorEmail' => 'jason.barnabe@gmail.com',
+   'MobileFriendly' => TRUE
 );
 
 require_once dirname(__FILE__).'/config.php';
