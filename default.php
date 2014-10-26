@@ -43,6 +43,11 @@ class ExtraDiscussionDataPlugin extends Gdn_Plugin {
 		$this->DiscussionsController_AfterDiscussionTitle_Handler($Sender);
 	}
 
+	# And the profile discussion list
+	public function ProfileController_AfterDiscussionTitle_Handler($Sender) {
+		$this->DiscussionsController_AfterDiscussionTitle_Handler($Sender);
+	}
+
 	private function GetConfig($Name) {
 		global $ExtraDiscussionDataConfig;
 		return $ExtraDiscussionDataConfig[$Name];
