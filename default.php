@@ -15,22 +15,30 @@ require_once dirname(__FILE__).'/config.php';
 
 class ExtraDiscussionDataPlugin extends Gdn_Plugin {
 
+	public $Config = null;
+
+	public function __construct() {
+		parent::__construct();
+		$this->Config = ExtraDiscussionDataPluginConfig();
+	}
+
 	# Include the options on the form
 	public function PostController_DiscussionFormOptions_Handler($Sender) {
-		$ShowWhen = $this->GetConfig('ShowFormWhen');
+		$ShowWhen = $this->Config['ShowFormWhen'];
 		if ($ShowWhen($Sender)) {
 			$FormArray = [];
-			foreach ($this->GetConfig('Values') as $Id => $Options) {
+			foreach ($this->Config['Values'] as $Id => $Options) {
 				$FormArray[$Id] = $Options['form_markup'];
 			}
-			$Sender->EventArguments['Options'] .= $Sender->Form->RadioList($this->GetConfig('ColumnName'), $FormArray);
+			$Sender->EventArguments['Options'] .= '<label>'.$this->Config['Label'].'</label>';
+			$Sender->EventArguments['Options'] .= $Sender->Form->RadioList($this->Config['ColumnName'], $FormArray);
 		}
 	}
 
 	# Individual discussion
 	public function DiscussionController_AfterDiscussionTitle_Handler($Sender) {
 		$Discussion = $Sender->EventArguments['Discussion'];
-		echo $this->GetConfig('Values')[$Discussion->{$this->GetConfig('ColumnName')}]['show_markup'];
+		echo $this->Config['Values'][$Discussion->{$this->Config['ColumnName']}]['show_markup'];
 	}
 
 	# Discussion list
@@ -48,8 +56,4 @@ class ExtraDiscussionDataPlugin extends Gdn_Plugin {
 		$this->DiscussionsController_AfterDiscussionTitle_Handler($Sender);
 	}
 
-	private function GetConfig($Name) {
-		global $ExtraDiscussionDataConfig;
-		return $ExtraDiscussionDataConfig[$Name];
-	}
 }
