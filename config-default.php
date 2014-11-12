@@ -15,6 +15,8 @@ function ExtraDiscussionDataPluginConfig() {
 
 	$Config['Label'] = 'Grade';
 
+	$Config['UpdateLabel'] = 'Grade';
+
 	// Markup to show on add/edit and show pages. Key is the value stored in the DB, value is an hash containing form_markup and show_markup. form_markup is added after the input tag when adding or editing a discussion. show_markup shows after the discussion name in the discussion list and discussion page.
 	$Config['Values'] = [
 		'' => [

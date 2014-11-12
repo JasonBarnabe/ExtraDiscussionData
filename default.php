@@ -35,6 +35,41 @@ class ExtraDiscussionDataPlugin extends Gdn_Plugin {
 		}
 	}
 
+	# UI for new post on existing discussion
+	public function DiscussionController_AfterBodyField_Handler($Sender) {
+		$ShowWhen = $this->Config['ShowFormWhen'];
+		if (!$ShowWhen($Sender)) {
+			return;
+		}
+		# Only the OP can change the rating
+		$DiscussionUserID = $Sender->Discussion->InsertUserID;
+		if (Gdn::Session()->UserID != $DiscussionUserID) {
+			return;
+		}
+		$FormArray = [];
+		foreach ($this->Config['Values'] as $Id => $Options) {
+			$FormArray[$Id] = $Options['form_markup'];
+		}
+		echo '<label>'.$this->Config['UpdateLabel'].'</label>';
+		$ColumnName = $this->Config['ColumnName'];
+		echo $Sender->Form->RadioList($this->Config['ColumnName'], $FormArray, ['Default' => $Sender->Discussion->$ColumnName]);
+	}
+
+	# Update existing discussion on new comment
+	public function CommentModel_AfterSaveComment_Handler($Sender) {
+		$Value = $Sender->EventArguments['FormPostValues'][$this->Config['ColumnName']];
+		$DiscussionID = $Sender->EventArguments['FormPostValues']['DiscussionID'];
+		if (!isset($Value) || !isset($DiscussionID)) {
+			return;
+		}
+		# Only the OP can change the value
+		$DiscussionUserID = $Sender->SQL->Select('InsertUserID')->From('Discussion')->Where('DiscussionID', $DiscussionID)->Get()->FirstRow(DATASET_TYPE_ARRAY)['InsertUserID'];
+		if (Gdn::Session()->UserID != $DiscussionUserID) {
+			return;
+		}
+		$Sender->SQL->Update('Discussion', [$this->Config['ColumnName'] => $Value], ['DiscussionID' => $DiscussionID])->Put();
+	}
+
 	# Individual discussion
 	public function DiscussionController_AfterDiscussionTitle_Handler($Sender) {
 		$Discussion = $Sender->EventArguments['Discussion'];
