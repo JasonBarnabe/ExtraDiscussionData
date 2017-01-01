@@ -8,7 +8,8 @@ $PluginInfo['ExtraDiscussionData'] = array(
    'RequiredApplications' => array('Vanilla' => '2.1'),
    'Author' => "Jason Barnabe",
    'AuthorEmail' => 'jason.barnabe@gmail.com',
-   'MobileFriendly' => TRUE
+   'MobileFriendly' => TRUE,
+   'License' => 'GNU GPL2'
 );
 
 require_once dirname(__FILE__).'/config.php';
@@ -31,7 +32,7 @@ class ExtraDiscussionDataPlugin extends Gdn_Plugin {
 				$FormArray[$Id] = $Options['form_markup'];
 			}
 			$Sender->EventArguments['Options'] .= '<label>'.$this->Config['Label'].'</label>';
-			$Sender->EventArguments['Options'] .= $Sender->Form->RadioList($this->Config['ColumnName'], $FormArray);
+			$Sender->EventArguments['Options'] .= '<div class="ExtraDiscussionData-'.$this->Config['ColumnName'].'">'.$Sender->Form->RadioList($this->Config['ColumnName'], $FormArray).'</div>';
 		}
 	}
 
@@ -52,7 +53,9 @@ class ExtraDiscussionDataPlugin extends Gdn_Plugin {
 		}
 		echo '<label>'.$this->Config['UpdateLabel'].'</label>';
 		$ColumnName = $this->Config['ColumnName'];
+		echo '<div class="ExtraDiscussionData-'.$ColumnName.'">';
 		echo $Sender->Form->RadioList($this->Config['ColumnName'], $FormArray, ['Default' => $Sender->Discussion->$ColumnName]);
+		echo '</div>';
 	}
 
 	# Update existing discussion on new comment
