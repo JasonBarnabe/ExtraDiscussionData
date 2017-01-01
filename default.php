@@ -4,7 +4,7 @@
 $PluginInfo['ExtraDiscussionData'] = array(
    'Name' => 'Extra Discussion Data',
    'Description' => 'Allows an additional piece of enumerable data on your discussions, for example ratings.',
-   'Version' => '1.1',
+   'Version' => '1.2',
    'RequiredApplications' => array('Vanilla' => '2.1'),
    'Author' => "Jason Barnabe",
    'AuthorEmail' => 'jason.barnabe@gmail.com',
